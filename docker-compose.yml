@@ -1,0 +1,36 @@
+version: "3"
+
+services:
+  restapi:
+    image: openjdk:8-alpine
+    command: java -jar /usr/src/myapp/S1INFO-Discord.jar
+    volumes:
+      - ./data/:/usr/src/myapp
+    restart: unless-stopped
+    links:
+      - mysql
+    environment:
+      - MYSQL_HOST=
+      - MYSQL_DATABASE=
+      - MYSQL_USER=
+      - MYSQL_PASSWORD=
+      - MYSQL_PORT=
+      - TOKEN=
+  mysql:
+    image: mysql
+    restart: unless-stopped
+    ports:
+      - "3306:3306"
+    volumes:
+      - ./mysql/:/var/lib/mysql
+    environment:
+      - MYSQL_ROOT_PASSWORD=
+      - MYSQL_USER=
+      - MYSQL_PASSWORD=
+  phpmyadmin:
+    image: phpmyadmin
+    restart: unless-stopped
+    ports:
+      - "8080:80"
+    links:
+      - mysql:db
