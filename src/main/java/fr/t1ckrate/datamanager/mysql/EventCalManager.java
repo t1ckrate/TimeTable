@@ -15,13 +15,16 @@
 
 package fr.t1ckrate.datamanager.mysql;
 
+import fr.t1ckrate.database.DatabaseInfo;
 import fr.t1ckrate.database.DatabaseManager;
 import fr.t1ckrate.datamanager.beans.EventBean;
+import fr.t1ckrate.injector.ToInject;
 
 import java.sql.*;
 import java.util.ArrayList;
 import java.util.List;
 
+@ToInject
 public class EventCalManager {
 
     private Connection connection = null;
@@ -30,7 +33,7 @@ public class EventCalManager {
 
     public void newEvent(EventBean eventBean) {
         try {
-            connection = DatabaseManager.SERVER.getDatabaseAccess().getConnection();
+            connection = DatabaseInfo.SERVER.getDatabaseAccess().getConnection();
             preparedStatement = connection.prepareStatement("INSERT INTO events(eventName, eventType, eventDesc, deadlineDate, channelId) VALUES (?, ?, ?, ?, ?)");
             preparedStatement.setString(1, eventBean.getEventName());
             preparedStatement.setString(2, eventBean.getEventType());
@@ -52,7 +55,7 @@ public class EventCalManager {
 
     public List<EventBean> getEvents(long calendarId) {
         try {
-            connection = DatabaseManager.SERVER.getDatabaseAccess().getConnection();
+            connection = DatabaseInfo.SERVER.getDatabaseAccess().getConnection();
             preparedStatement = connection.prepareStatement("SELECT * FROM events WHERE channelId = ?");
             preparedStatement.setLong(1, calendarId);
 

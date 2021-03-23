@@ -1,6 +1,7 @@
 # TimeTable
 
-TimeTable is a **Discord BOT** that create you **a calendar inside a Discord Server**. That could be useful to list all your incoming events.
+TimeTable is a **Discord BOT** that create you **a calendar inside a Discord Server**. That could be useful to list all
+your incoming events.
 *I'm using it for my Discord school to list all incoming exams.*
 
 ### Tech

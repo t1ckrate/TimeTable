@@ -17,6 +17,8 @@ package fr.t1ckrate.database;
 
 import com.zaxxer.hikari.HikariConfig;
 import com.zaxxer.hikari.HikariDataSource;
+import fr.t1ckrate.injector.Inject;
+import fr.t1ckrate.injector.ToInject;
 
 import java.sql.Connection;
 import java.sql.SQLException;
@@ -29,7 +31,7 @@ public class DatabaseAccess {
         this.credentials = credentials;
     }
 
-    private void setupHikariCP(){
+    private void setupHikariCP() {
         final HikariConfig hikariConfig = new HikariConfig();
 
         hikariConfig.setMaximumPoolSize(10);
@@ -44,16 +46,16 @@ public class DatabaseAccess {
         this.hikariDataSource = new HikariDataSource(hikariConfig);
     }
 
-    public void initPool(){
+    public void initPool() {
         setupHikariCP();
     }
 
-    public void closePool(){
+    public void closePool() {
         this.hikariDataSource.close();
     }
 
-    public Connection getConnection() throws SQLException{
-        if(this.hikariDataSource == null) {
+    public Connection getConnection() throws SQLException {
+        if (this.hikariDataSource == null) {
             System.out.println("Not connected");
             setupHikariCP();
         }

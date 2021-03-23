@@ -24,7 +24,7 @@ import java.time.Instant;
 import java.util.List;
 
 public class EmbedMessages {
-    public static EmbedBuilder getCalendarEmbed(CalendarBean calendarBean, List<EventBean> eventBeanList){
+    public static EmbedBuilder getCalendarEmbed(CalendarBean calendarBean, List<EventBean> eventBeanList) {
         EmbedBuilder embedBuilder = new EmbedBuilder();
         embedBuilder.setTitle(calendarBean.getCalendarTitle(), calendarBean.getCalendarUrl().startsWith("http") ? calendarBean.getCalendarUrl() : null);
         if (calendarBean.getCalendarUrl().startsWith("http"))

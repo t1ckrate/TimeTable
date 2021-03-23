@@ -16,24 +16,27 @@
 package fr.t1ckrate;
 
 import fr.t1ckrate.database.DatabaseManager;
-import fr.t1ckrate.datamanager.mysql.CalendarManager;
-import fr.t1ckrate.datamanager.mysql.EventCalManager;
 import fr.t1ckrate.datamanager.mysql.DataGuildManager;
 import fr.t1ckrate.discord.JDAManager;
-import fr.t1ckrate.messages.DiscordCalManager;
+import fr.t1ckrate.injector.Inject;
+import fr.t1ckrate.injector.Injector;
 
 
 public class Main {
 
-    public static final JDAManager jdaManager = new JDAManager();
+    @Inject
+    private static DataGuildManager dataGuildManager;
 
-    public static final EventCalManager eventCalManager = new EventCalManager();
-    public static final CalendarManager calendarManager = new CalendarManager();
-    public static final DataGuildManager dataGuildManager = new DataGuildManager();
-    public static final DiscordCalManager discordCalManager = new DiscordCalManager();
+    @Inject
+    private static JDAManager jdaManager;
 
-    public static void main(String[] args){
-        DatabaseManager.initAllDatabaseConnections();
+    @Inject
+    private static DatabaseManager databaseManager;
+
+    public static void main(String[] args) {
+        new Injector().defaultInject();
+        databaseManager.initAllDatabaseConnections();
+        jdaManager.init();
         dataGuildManager.cacheGuildPrefix();
     }
 

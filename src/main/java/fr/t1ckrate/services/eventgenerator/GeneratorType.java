@@ -13,26 +13,38 @@
  *
  */
 
-package fr.t1ckrate.database;
+package fr.t1ckrate.services.eventgenerator;
 
-import fr.t1ckrate.injector.Inject;
-import fr.t1ckrate.injector.ToInject;
+import fr.t1ckrate.services.eventgenerator.fields.DateField;
+import fr.t1ckrate.services.eventgenerator.fields.DescField;
+import fr.t1ckrate.services.eventgenerator.fields.TitleField;
+import fr.t1ckrate.services.eventgenerator.fields.TypeField;
 
-@ToInject
-public class DatabaseManager {
+import java.lang.reflect.InvocationTargetException;
 
-    @Inject
-    private static DatabaseAccess databaseAccess;
+public enum GeneratorType {
+    TITLE(TitleField.class),
+    DESC(DescField.class),
+    DATE(DateField.class),
+    TYPE(TypeField.class),
+    ;
 
-    public void initAllDatabaseConnections() {
-        for (DatabaseInfo databaseInfo : DatabaseInfo.values()) {
-            databaseInfo.getDatabaseAccess().initPool();
-        }
+    Class customClass;
+
+    GeneratorType(Class customClass){
+        this.customClass = customClass;
     }
 
-    public void closeAllDatabaseConnections() {
-        for (DatabaseInfo databaseInfo : DatabaseInfo.values()) {
-            databaseInfo.getDatabaseAccess().closePool();
+    public Class getCustomClass() {
+        return customClass;
+    }
+
+    public IGeneratorStep createInstance(){
+        try {
+            return (IGeneratorStep) customClass.getDeclaredConstructor().newInstance();
+        } catch (InvocationTargetException | NoSuchMethodException | IllegalAccessException | InstantiationException e) {
+            e.printStackTrace();
         }
+        return null;
     }
 }

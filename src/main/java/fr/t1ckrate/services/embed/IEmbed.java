@@ -13,26 +13,14 @@
  *
  */
 
-package fr.t1ckrate.database;
+package fr.t1ckrate.services.embed;
 
-import fr.t1ckrate.injector.Inject;
-import fr.t1ckrate.injector.ToInject;
+import java.awt.*;
 
-@ToInject
-public class DatabaseManager {
-
-    @Inject
-    private static DatabaseAccess databaseAccess;
-
-    public void initAllDatabaseConnections() {
-        for (DatabaseInfo databaseInfo : DatabaseInfo.values()) {
-            databaseInfo.getDatabaseAccess().initPool();
-        }
-    }
-
-    public void closeAllDatabaseConnections() {
-        for (DatabaseInfo databaseInfo : DatabaseInfo.values()) {
-            databaseInfo.getDatabaseAccess().closePool();
-        }
-    }
+public interface IEmbed {
+    String getTitle();
+    String getDescription();
+    String getFooter();
+    String getFooterUrl();
+    Color getColor();
 }

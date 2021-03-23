@@ -2,6 +2,7 @@ package fr.t1ckrate.injector;
 
 import io.github.classgraph.ClassGraph;
 import io.github.classgraph.FieldInfo;
+
 import java.lang.reflect.Field;
 import java.lang.reflect.InvocationTargetException;
 import java.util.HashMap;

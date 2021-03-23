@@ -15,18 +15,19 @@
 
 package fr.t1ckrate.datamanager.mysql;
 
+import fr.t1ckrate.database.DatabaseInfo;
 import fr.t1ckrate.database.DatabaseManager;
-import fr.t1ckrate.datamanager.beans.EventBean;
 import fr.t1ckrate.datamanager.beans.GuildBean;
+import fr.t1ckrate.injector.ToInject;
 
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
-import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
 
+@ToInject
 public class DataGuildManager {
 
     public Map<Long, String> prefixCache = new HashMap<>();
@@ -37,7 +38,7 @@ public class DataGuildManager {
 
     public void newGuild(long guildId) {
         try {
-            connection = DatabaseManager.SERVER.getDatabaseAccess().getConnection();
+            connection = DatabaseInfo.SERVER.getDatabaseAccess().getConnection();
             statement = connection.prepareStatement("INSERT INTO guilds(guildId, prefix) VALUES (?, ?)");
             statement.setLong(1, guildId);
             statement.setString(2, "-");
@@ -56,17 +57,16 @@ public class DataGuildManager {
 
     public GuildBean getGuildProperties(long guildId) {
         try {
-            connection = DatabaseManager.SERVER.getDatabaseAccess().getConnection();
+            connection = DatabaseInfo.SERVER.getDatabaseAccess().getConnection();
             statement = connection.prepareStatement("SELECT * FROM guilds WHERE guildId = ?");
             statement.setLong(1, guildId);
 
             resultSet = statement.executeQuery();
             GuildBean guildBean;
-            if(!resultSet.next()){
+            if (!resultSet.next()) {
                 newGuild(guildId);
                 guildBean = new GuildBean(guildId, "-");
-            }
-            else{
+            } else {
                 guildBean = new GuildBean(guildId, resultSet.getString("prefix"));
             }
             return guildBean;
@@ -84,7 +84,7 @@ public class DataGuildManager {
 
     public void editGuildProperties(GuildBean guildBean) {
         try {
-            connection = DatabaseManager.SERVER.getDatabaseAccess().getConnection();
+            connection = DatabaseInfo.SERVER.getDatabaseAccess().getConnection();
             statement = connection.prepareStatement("UPDATE guilds SET prefix = ? WHERE guildId = ?");
             statement.setString(1, guildBean.getPrefix());
             statement.setLong(2, guildBean.getGuildId());
@@ -103,11 +103,11 @@ public class DataGuildManager {
 
     public void cacheGuildPrefix() {
         try {
-            connection = DatabaseManager.SERVER.getDatabaseAccess().getConnection();
+            connection = DatabaseInfo.SERVER.getDatabaseAccess().getConnection();
             statement = connection.prepareStatement("SELECT * FROM guilds");
 
             resultSet = statement.executeQuery();
-            while(resultSet.next()){
+            while (resultSet.next()) {
                 prefixCache.put(resultSet.getLong("guildId"), resultSet.getString("prefix"));
             }
         } catch (SQLException e) {

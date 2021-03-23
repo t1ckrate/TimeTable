@@ -13,26 +13,36 @@
  *
  */
 
-package fr.t1ckrate.database;
+package fr.t1ckrate.services.embed.embedtypes;
 
-import fr.t1ckrate.injector.Inject;
-import fr.t1ckrate.injector.ToInject;
+import fr.t1ckrate.services.embed.IEmbed;
 
-@ToInject
-public class DatabaseManager {
+import java.awt.*;
 
-    @Inject
-    private static DatabaseAccess databaseAccess;
+public class TitleEmbed implements IEmbed {
 
-    public void initAllDatabaseConnections() {
-        for (DatabaseInfo databaseInfo : DatabaseInfo.values()) {
-            databaseInfo.getDatabaseAccess().initPool();
-        }
+    @Override
+    public String getTitle() {
+        return "Ajouter un évènement à l'agenda";
     }
 
-    public void closeAllDatabaseConnections() {
-        for (DatabaseInfo databaseInfo : DatabaseInfo.values()) {
-            databaseInfo.getDatabaseAccess().closePool();
-        }
+    @Override
+    public String getDescription() {
+        return "\uD83D\uDCCC **|** Veuillez écrire le titre de cet évènement";
+    }
+
+    @Override
+    public String getFooter() {
+        return "TimeTable";
+    }
+
+    @Override
+    public String getFooterUrl() {
+        return "https://t1ckrate.fr/img/timetable.png";
+    }
+
+    @Override
+    public Color getColor() {
+        return Color.GREEN;
     }
 }

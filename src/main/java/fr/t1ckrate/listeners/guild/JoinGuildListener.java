@@ -15,16 +15,20 @@
 
 package fr.t1ckrate.listeners.guild;
 
-import fr.t1ckrate.Main;
+import fr.t1ckrate.datamanager.mysql.DataGuildManager;
+import fr.t1ckrate.injector.Inject;
 import net.dv8tion.jda.api.events.guild.GuildJoinEvent;
 import net.dv8tion.jda.api.hooks.ListenerAdapter;
 import org.jetbrains.annotations.NotNull;
 
 public class JoinGuildListener extends ListenerAdapter {
 
+    @Inject
+    private static DataGuildManager dataGuildManager;
+
     @Override
     public void onGuildJoin(@NotNull GuildJoinEvent event) {
-        Main.dataGuildManager.newGuild(event.getGuild().getIdLong());
-        Main.dataGuildManager.prefixCache.put(event.getGuild().getIdLong(), "-");
+        dataGuildManager.newGuild(event.getGuild().getIdLong());
+        dataGuildManager.prefixCache.put(event.getGuild().getIdLong(), "-");
     }
 }

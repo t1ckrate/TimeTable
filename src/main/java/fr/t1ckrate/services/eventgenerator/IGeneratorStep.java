@@ -13,26 +13,9 @@
  *
  */
 
-package fr.t1ckrate.database;
+package fr.t1ckrate.services.eventgenerator;
 
-import fr.t1ckrate.injector.Inject;
-import fr.t1ckrate.injector.ToInject;
-
-@ToInject
-public class DatabaseManager {
-
-    @Inject
-    private static DatabaseAccess databaseAccess;
-
-    public void initAllDatabaseConnections() {
-        for (DatabaseInfo databaseInfo : DatabaseInfo.values()) {
-            databaseInfo.getDatabaseAccess().initPool();
-        }
-    }
-
-    public void closeAllDatabaseConnections() {
-        for (DatabaseInfo databaseInfo : DatabaseInfo.values()) {
-            databaseInfo.getDatabaseAccess().closePool();
-        }
-    }
+public interface IGeneratorStep {
+    GeneratorType getGeneratorType();
+    String getGeneratorMessage();
 }

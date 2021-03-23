@@ -16,20 +16,24 @@
 package fr.t1ckrate.discord;
 
 import fr.t1ckrate.Main;
+import fr.t1ckrate.injector.Inject;
 import net.dv8tion.jda.api.entities.Activity;
 
 import java.util.TimerTask;
 
 public class ActivityScheduler extends TimerTask {
     boolean bio = false;
+
+    @Inject
+    private static JDAManager jdaManager;
+
     @Override
     public void run() {
-        if(bio) {
-            Main.jdaManager.getShardManager().setActivity(Activity.of(Activity.ActivityType.DEFAULT, "Fait avec ❤ par t1ckrate"));
+        if (bio) {
+            jdaManager.getShardManager().setActivity(Activity.of(Activity.ActivityType.DEFAULT, "Fait avec ❤ par t1ckrate"));
             bio = false;
-        }
-        else {
-            Main.jdaManager.getShardManager().setActivity(Activity.of(Activity.ActivityType.DEFAULT, "OpenSource - timetable.t1ckrate.fr"));
+        } else {
+            jdaManager.getShardManager().setActivity(Activity.of(Activity.ActivityType.DEFAULT, "OpenSource - timetable.t1ckrate.fr"));
             bio = true;
         }
 

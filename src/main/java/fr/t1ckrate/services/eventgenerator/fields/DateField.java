@@ -13,26 +13,19 @@
  *
  */
 
-package fr.t1ckrate.database;
+package fr.t1ckrate.services.eventgenerator.fields;
 
-import fr.t1ckrate.injector.Inject;
-import fr.t1ckrate.injector.ToInject;
+import fr.t1ckrate.services.eventgenerator.GeneratorType;
+import fr.t1ckrate.services.eventgenerator.IGeneratorStep;
 
-@ToInject
-public class DatabaseManager {
-
-    @Inject
-    private static DatabaseAccess databaseAccess;
-
-    public void initAllDatabaseConnections() {
-        for (DatabaseInfo databaseInfo : DatabaseInfo.values()) {
-            databaseInfo.getDatabaseAccess().initPool();
-        }
+public class DateField implements IGeneratorStep {
+    @Override
+    public GeneratorType getGeneratorType() {
+        return null;
     }
 
-    public void closeAllDatabaseConnections() {
-        for (DatabaseInfo databaseInfo : DatabaseInfo.values()) {
-            databaseInfo.getDatabaseAccess().closePool();
-        }
+    @Override
+    public String getGeneratorMessage() {
+        return null;
     }
 }

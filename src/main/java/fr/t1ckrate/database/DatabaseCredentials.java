@@ -23,8 +23,7 @@ public class DatabaseCredentials {
     private int port;
 
 
-    public DatabaseCredentials( String host, String database, String user, String pass, int port)
-    {
+    public DatabaseCredentials(String host, String database, String user, String pass, int port) {
         this.host = host;
         this.database = database;
         this.user = user;
@@ -32,8 +31,8 @@ public class DatabaseCredentials {
         this.port = port;
     }
 
-    public String toURI(){
-        final  StringBuilder sb = new StringBuilder();
+    public String toURI() {
+        final StringBuilder sb = new StringBuilder();
 
         sb.append("jdbc:mysql://")
                 .append(host)

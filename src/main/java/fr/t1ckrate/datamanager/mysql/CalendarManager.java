@@ -15,8 +15,11 @@
 
 package fr.t1ckrate.datamanager.mysql;
 
+import fr.t1ckrate.database.DatabaseInfo;
 import fr.t1ckrate.database.DatabaseManager;
 import fr.t1ckrate.datamanager.beans.CalendarBean;
+import fr.t1ckrate.injector.Inject;
+import fr.t1ckrate.injector.ToInject;
 
 import java.sql.Connection;
 import java.sql.PreparedStatement;
@@ -25,15 +28,19 @@ import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
 
+@ToInject
 public class CalendarManager {
 
     private Connection connection = null;
     private PreparedStatement statement = null;
     private ResultSet resultSet = null;
 
+    @Inject
+    private static DatabaseManager databaseManager;
+
     public void newCalendar(CalendarBean calendarBean) {
         try {
-            connection = DatabaseManager.SERVER.getDatabaseAccess().getConnection();
+            connection = DatabaseInfo.SERVER.getDatabaseAccess().getConnection();
             statement = connection.prepareStatement("INSERT INTO calendars(channelId, calendarTitle, calendarUrl, guildId, messageId) VALUES (?, ?, ?, ?, ?)");
             statement.setLong(1, calendarBean.getChannelId());
             statement.setString(2, calendarBean.getCalendarTitle());
@@ -55,7 +62,7 @@ public class CalendarManager {
 
     public List<CalendarBean> getCalendars(long guildId) {
         try {
-            connection = DatabaseManager.SERVER.getDatabaseAccess().getConnection();
+            connection = DatabaseInfo.SERVER.getDatabaseAccess().getConnection();
             statement = connection.prepareStatement("SELECT * FROM calendars WHERE guildId = ?");
             statement.setLong(1, guildId);
 
@@ -84,7 +91,7 @@ public class CalendarManager {
 
     public CalendarBean getCalendarByChannelId(long channelId) {
         try {
-            connection = DatabaseManager.SERVER.getDatabaseAccess().getConnection();
+            connection = DatabaseInfo.SERVER.getDatabaseAccess().getConnection();
             statement = connection.prepareStatement("SELECT * FROM calendars WHERE channelId = ?");
             statement.setLong(1, channelId);
 

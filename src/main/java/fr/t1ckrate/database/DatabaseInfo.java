@@ -15,24 +15,16 @@
 
 package fr.t1ckrate.database;
 
-import fr.t1ckrate.injector.Inject;
-import fr.t1ckrate.injector.ToInject;
+public enum DatabaseInfo {
+    SERVER(new DatabaseCredentials(System.getenv("MYSQL_HOST"), System.getenv("MYSQL_DATABASE"), System.getenv("MYSQL_USER"), System.getenv("MYSQL_PASSWORD"), Integer.parseInt(System.getenv("MYSQL_PORT"))));
 
-@ToInject
-public class DatabaseManager {
+    private DatabaseAccess databaseAccess;
 
-    @Inject
-    private static DatabaseAccess databaseAccess;
-
-    public void initAllDatabaseConnections() {
-        for (DatabaseInfo databaseInfo : DatabaseInfo.values()) {
-            databaseInfo.getDatabaseAccess().initPool();
-        }
+    DatabaseInfo(DatabaseCredentials credentials) {
+        this.databaseAccess = new DatabaseAccess(credentials);
     }
 
-    public void closeAllDatabaseConnections() {
-        for (DatabaseInfo databaseInfo : DatabaseInfo.values()) {
-            databaseInfo.getDatabaseAccess().closePool();
-        }
+    public DatabaseAccess getDatabaseAccess() {
+        return databaseAccess;
     }
 }

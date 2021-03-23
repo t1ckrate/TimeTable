@@ -13,26 +13,32 @@
  *
  */
 
-package fr.t1ckrate.database;
+package fr.t1ckrate.services.embed;
 
-import fr.t1ckrate.injector.Inject;
-import fr.t1ckrate.injector.ToInject;
+import fr.t1ckrate.services.eventgenerator.GeneratorType;
 
-@ToInject
-public class DatabaseManager {
+public class EmbedBean {
+    public GeneratorType generatorType;
+    public long messageId;
 
-    @Inject
-    private static DatabaseAccess databaseAccess;
-
-    public void initAllDatabaseConnections() {
-        for (DatabaseInfo databaseInfo : DatabaseInfo.values()) {
-            databaseInfo.getDatabaseAccess().initPool();
-        }
+    public EmbedBean(GeneratorType generatorType, long messageId) {
+        this.generatorType = generatorType;
+        this.messageId = messageId;
     }
 
-    public void closeAllDatabaseConnections() {
-        for (DatabaseInfo databaseInfo : DatabaseInfo.values()) {
-            databaseInfo.getDatabaseAccess().closePool();
-        }
+    public GeneratorType getGeneratorType() {
+        return generatorType;
+    }
+
+    public void setGeneratorType(GeneratorType generatorType) {
+        this.generatorType = generatorType;
+    }
+
+    public long getMessageId() {
+        return messageId;
+    }
+
+    public void setMessageId(long messageId) {
+        this.messageId = messageId;
     }
 }

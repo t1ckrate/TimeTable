@@ -43,7 +43,6 @@ public class EventBean {
     }
 
 
-
     public long getUUID() {
         return UUID;
     }

@@ -15,70 +15,81 @@
 
 package fr.t1ckrate.listeners.commands;
 
-import fr.t1ckrate.Main;
 import fr.t1ckrate.datamanager.beans.CalendarBean;
 import fr.t1ckrate.datamanager.beans.GuildBean;
-import fr.t1ckrate.messages.EmbedMessages;
+import fr.t1ckrate.datamanager.mysql.CalendarManager;
+import fr.t1ckrate.datamanager.mysql.DataGuildManager;
+import fr.t1ckrate.injector.Inject;
+import fr.t1ckrate.messages.DiscordCalManager;
 import net.dv8tion.jda.api.entities.Message;
 import net.dv8tion.jda.api.events.message.guild.GuildMessageReceivedEvent;
 import net.dv8tion.jda.api.hooks.ListenerAdapter;
 import org.jetbrains.annotations.NotNull;
 
-import java.util.Calendar;
 import java.util.concurrent.TimeUnit;
 
 public class CreateCommand extends ListenerAdapter {
-    public void onGuildMessageReceived(@NotNull GuildMessageReceivedEvent event){
+
+    @Inject
+    private static DataGuildManager dataGuildManager;
+
+    @Inject
+    private static CalendarManager calendarManager;
+
+    @Inject
+    private static DiscordCalManager discordCalManager;
+
+    public void onGuildMessageReceived(@NotNull GuildMessageReceivedEvent event) {
         if(event.getAuthor().isBot())
             return;
 
         Message message = event.getMessage();
 
         String prefix = String.valueOf(message.getContentRaw().charAt(0));
-        if(!prefix.equalsIgnoreCase(Main.dataGuildManager.prefixCache.get(event.getGuild().getIdLong())))
+        if (!prefix.equalsIgnoreCase(dataGuildManager.prefixCache.get(event.getGuild().getIdLong())))
             return;
 
 
         String[] args = message.getContentRaw().split(" ");
         String command = args[0].substring(1);
-        if(command.equals("create")){
-            GuildBean guildBean = Main.dataGuildManager.getGuildProperties(event.getGuild().getIdLong());
-            if(!guildBean.getPrefix().equals(String.valueOf(message.getContentRaw().charAt(0))))
+        if (command.equals("create")) {
+            GuildBean guildBean = dataGuildManager.getGuildProperties(event.getGuild().getIdLong());
+            if (!guildBean.getPrefix().equals(String.valueOf(message.getContentRaw().charAt(0))))
                 return;
 
             event.getMessage().delete().queueAfter(3, TimeUnit.SECONDS);
 
-            if(args.length <= 2){
+            if (args.length <= 2) {
                 event.getChannel().sendMessage(message.getAuthor().getAsMention() +
                         " **»** Merci de préciser un URL et un titre. *(Syntaxe: " + prefix + "create <URL> <Titre>)*").submit().whenComplete((message1, throwable) -> message1.delete().queueAfter(3, TimeUnit.SECONDS));
                 return;
             }
 
             String title = "";
-            for(int i = 2; i < args.length; i++){
+            for (int i = 2; i < args.length; i++) {
                 title += args[i];
             }
 
-            if(title.length() > 50){
+            if (title.length() > 50) {
                 event.getChannel().sendMessage(message.getAuthor().getAsMention() +
                         " **»** Votre titre de calendrier est **trop long**. *(Syntaxe: " + prefix + "create <URL> <Titre>)*").submit().whenComplete((message1, throwable) -> message1.delete().queueAfter(3, TimeUnit.SECONDS));
                 return;
             }
 
             String url = args[1];
-            CalendarBean calendarBean = Main.calendarManager.getCalendarByChannelId(message.getChannel().getIdLong());
-            if (calendarBean != null){
+            CalendarBean calendarBean = calendarManager.getCalendarByChannelId(message.getChannel().getIdLong());
+            if (calendarBean != null) {
                 event.getChannel().sendMessage(message.getAuthor().getAsMention() +
                         " **»** Le calendrier existe déjà.").submit().whenComplete((message1, throwable) -> message1.delete().queueAfter(3, TimeUnit.SECONDS));
                 return;
             }
 
             final CalendarBean calendarBean1 = new CalendarBean(title, url, event.getChannel().getIdLong(), event.getGuild().getIdLong());
-            Main.discordCalManager.handleCalendarEvents(calendarBean1, event.getChannel()).subscribe(messageId -> {
-                    calendarBean1.setMessageId(messageId);
-                    Main.calendarManager.newCalendar(calendarBean1);
-                    event.getChannel().sendMessage(message.getAuthor().getAsMention() +
-                            " **»** Le calendrier a été crée.").submit().whenComplete((message1, throwable) -> message1.delete().queueAfter(3, TimeUnit.SECONDS));
+            discordCalManager.handleCalendarEvents(calendarBean1, event.getChannel()).subscribe(messageId -> {
+                calendarBean1.setMessageId(messageId);
+                calendarManager.newCalendar(calendarBean1);
+                event.getChannel().sendMessage(message.getAuthor().getAsMention() +
+                        " **»** Le calendrier a été crée.").submit().whenComplete((message1, throwable) -> message1.delete().queueAfter(3, TimeUnit.SECONDS));
 
             });
         }

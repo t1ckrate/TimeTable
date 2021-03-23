@@ -15,29 +15,36 @@
 
 package fr.t1ckrate.messages;
 
-import fr.t1ckrate.Main;
 import fr.t1ckrate.datamanager.beans.CalendarBean;
 import fr.t1ckrate.datamanager.beans.EventBean;
+import fr.t1ckrate.datamanager.mysql.EventCalManager;
+import fr.t1ckrate.injector.Inject;
+import fr.t1ckrate.injector.ToInject;
 import net.dv8tion.jda.api.entities.TextChannel;
 import reactor.core.publisher.Mono;
 
 import java.util.ArrayList;
 import java.util.List;
 
+@ToInject
 public class DiscordCalManager {
+
+    @Inject
+    private static EventCalManager eventCalManager;
+
     public Mono<Long> handleCalendarEvents(CalendarBean calendarBean, TextChannel textChannel) {
         return Mono.create(callback -> {
-            List<EventBean> events = Main.eventCalManager.getEvents(calendarBean.getChannelId());
+            List<EventBean> events = eventCalManager.getEvents(calendarBean.getChannelId());
             if (events == null)
                 events = new ArrayList<>();
             if (calendarBean.getMessageId() != 0L) {
                 List<EventBean> finalEvents = events;
                 textChannel.editMessageById(calendarBean.getMessageId(), EmbedMessages.getCalendarEmbed(calendarBean, events).build()).submit().whenComplete((message1, throwable1) -> {
-                    if(throwable1 == null)
+                    if (throwable1 == null)
                         callback.success(message1.getIdLong());
                     else
                         textChannel.sendMessage(EmbedMessages.getCalendarEmbed(calendarBean, finalEvents).build()).submit().whenComplete((message, throwable) -> {
-                            if(throwable != null)
+                            if (throwable != null)
                                 callback.error(throwable);
                             else
                                 callback.success(message.getIdLong());
@@ -45,7 +52,7 @@ public class DiscordCalManager {
                 });
             } else {
                 textChannel.sendMessage(EmbedMessages.getCalendarEmbed(calendarBean, events).build()).submit().whenComplete((message, throwable) -> {
-                    if(throwable != null)
+                    if (throwable != null)
                         callback.error(throwable);
                     else
                         callback.success(message.getIdLong());

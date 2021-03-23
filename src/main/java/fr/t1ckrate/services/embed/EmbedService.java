@@ -13,26 +13,25 @@
  *
  */
 
-package fr.t1ckrate.database;
+package fr.t1ckrate.services.embed;
 
-import fr.t1ckrate.injector.Inject;
 import fr.t1ckrate.injector.ToInject;
+import net.dv8tion.jda.api.EmbedBuilder;
+import net.dv8tion.jda.api.entities.MessageEmbed;
+
+import java.awt.*;
+import java.time.Instant;
 
 @ToInject
-public class DatabaseManager {
+public class EmbedService {
+    public MessageEmbed getEmbed(IEmbed embed){
+        EmbedBuilder embedBuilder = new EmbedBuilder();
 
-    @Inject
-    private static DatabaseAccess databaseAccess;
-
-    public void initAllDatabaseConnections() {
-        for (DatabaseInfo databaseInfo : DatabaseInfo.values()) {
-            databaseInfo.getDatabaseAccess().initPool();
-        }
-    }
-
-    public void closeAllDatabaseConnections() {
-        for (DatabaseInfo databaseInfo : DatabaseInfo.values()) {
-            databaseInfo.getDatabaseAccess().closePool();
-        }
+        embedBuilder.setTitle(embed.getTitle());
+        embedBuilder.setDescription(embed.getDescription());
+        embedBuilder.setColor(embed.getColor());
+        embedBuilder.setTimestamp(Instant.now());
+        embedBuilder.setFooter(embed.getFooter(), embed.getFooterUrl());
+        return embedBuilder.build();
     }
 }

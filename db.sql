@@ -7,9 +7,11 @@
 -- Version du serveur :  5.7.32
 -- Version de PHP : 7.4.11
 
-SET SQL_MODE = "NO_AUTO_VALUE_ON_ZERO";
+SET
+SQL_MODE = "NO_AUTO_VALUE_ON_ZERO";
 START TRANSACTION;
-SET time_zone = "+00:00";
+SET
+time_zone = "+00:00";
 
 
 /*!40101 SET @OLD_CHARACTER_SET_CLIENT=@@CHARACTER_SET_CLIENT */;
@@ -27,12 +29,13 @@ SET time_zone = "+00:00";
 -- Structure de la table `calendars`
 --
 
-CREATE TABLE `calendars` (
-                             `channelId` bigint(20) NOT NULL,
-                             `calendarTitle` text NOT NULL,
-                             `calendarUrl` text NOT NULL,
-                             `messageId` bigint(20) NOT NULL,
-                             `guildId` bigint(20) NOT NULL
+CREATE TABLE `calendars`
+(
+    `channelId`     bigint(20) NOT NULL,
+    `calendarTitle` text NOT NULL,
+    `calendarUrl`   text NOT NULL,
+    `messageId`     bigint(20) NOT NULL,
+    `guildId`       bigint(20) NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1;
 
 -- --------------------------------------------------------
@@ -41,13 +44,14 @@ CREATE TABLE `calendars` (
 -- Structure de la table `events`
 --
 
-CREATE TABLE `events` (
-                          `eventId` bigint(20) NOT NULL,
-                          `eventName` text NOT NULL,
-                          `eventType` text NOT NULL,
-                          `eventDesc` text NOT NULL,
-                          `deadlineDate` date NOT NULL,
-                          `channelId` bigint(20) NOT NULL
+CREATE TABLE `events`
+(
+    `eventId`      bigint(20) NOT NULL,
+    `eventName`    text NOT NULL,
+    `eventType`    text NOT NULL,
+    `eventDesc`    text NOT NULL,
+    `deadlineDate` date NOT NULL,
+    `channelId`    bigint(20) NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1;
 
 -- --------------------------------------------------------
@@ -56,9 +60,10 @@ CREATE TABLE `events` (
 -- Structure de la table `guilds`
 --
 
-CREATE TABLE `guilds` (
-                          `guildId` bigint(20) NOT NULL,
-                          `prefix` text NOT NULL
+CREATE TABLE `guilds`
+(
+    `guildId` bigint(20) NOT NULL,
+    `prefix`  text NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1;
 
 --

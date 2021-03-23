@@ -15,6 +15,8 @@
 
 package fr.t1ckrate.discord;
 
+import fr.t1ckrate.injector.Inject;
+import fr.t1ckrate.injector.ToInject;
 import fr.t1ckrate.listeners.commands.CreateCommand;
 import fr.t1ckrate.listeners.commands.EventAddCommand;
 import fr.t1ckrate.listeners.guild.JoinGuildListener;
@@ -24,10 +26,11 @@ import net.dv8tion.jda.api.sharding.ShardManager;
 import javax.security.auth.login.LoginException;
 import java.util.Timer;
 
+@ToInject
 public class JDAManager {
     public ShardManager shardManager;
 
-    public JDAManager() {
+    public void init(){
         DefaultShardManagerBuilder builder = DefaultShardManagerBuilder.createDefault(System.getenv("TOKEN"));
 
         //Event Listeners

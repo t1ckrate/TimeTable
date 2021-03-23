@@ -13,26 +13,29 @@
  *
  */
 
-package fr.t1ckrate.database;
+package fr.t1ckrate.services.eventgenerator;
 
-import fr.t1ckrate.injector.Inject;
 import fr.t1ckrate.injector.ToInject;
+import fr.t1ckrate.services.embed.EmbedBean;
+import net.dv8tion.jda.api.entities.User;
+
+import java.util.HashMap;
 
 @ToInject
-public class DatabaseManager {
+public class GeneratorService {
+    private final HashMap<Long, EmbedBean> userPV = new HashMap<>();
 
-    @Inject
-    private static DatabaseAccess databaseAccess;
-
-    public void initAllDatabaseConnections() {
-        for (DatabaseInfo databaseInfo : DatabaseInfo.values()) {
-            databaseInfo.getDatabaseAccess().initPool();
+    public void sendGeneratorMessage(User user){
+        if(!userPV.containsKey(user.getIdLong())){
+            IGeneratorStep generatorStep = toGeneratorStep(GeneratorType.TITLE);
         }
     }
 
-    public void closeAllDatabaseConnections() {
-        for (DatabaseInfo databaseInfo : DatabaseInfo.values()) {
-            databaseInfo.getDatabaseAccess().closePool();
-        }
+    public void addToPVList(User user, EmbedBean embedBean){
+        userPV.put(user.getIdLong(), embedBean);
+    }
+
+    public IGeneratorStep toGeneratorStep(GeneratorType generatorType){
+        return generatorType.createInstance();
     }
 }
